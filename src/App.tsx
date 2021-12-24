@@ -62,7 +62,7 @@ function createApp(ref: HTMLElement) {
   };
 
   const createFarm = ({ x, y }: { x: number; y: number }) => {
-    const area = 4 * 10;
+    const area = 8 * 10;
 
     const gr = new PIXI.Graphics();
     gr.beginFill();
@@ -88,6 +88,28 @@ function createApp(ref: HTMLElement) {
       gr.moveTo(x - area / 2, y - area / 2);
       gr.lineTo(x - area / 2, y - area / 2 + 4);
     });
+
+    gr.endFill();
+    gr.x = x;
+    gr.y = y;
+    return gr;
+  };
+
+  const createHouse = ({ x, y }: { x: number; y: number }) => {
+    const area = 40;
+
+    const gr = new PIXI.Graphics();
+    gr.beginFill( 0xdfaf7f, 1);
+    gr.lineStyle(2, 0xaf7f3f, 1, 0);
+
+    const half = area / 2;
+    gr.drawRect(0 - half, 0 - half, area, area);
+
+    gr.moveTo(1, 0 - area / 2);
+    gr.lineTo(1, area / 2);
+
+    gr.lineStyle(2, 0x3f3f00, 1, 0);
+    gr.drawCircle(area / 4 - half, area / 4 - half, 4);
 
     gr.endFill();
     gr.x = x;
@@ -141,11 +163,19 @@ function createApp(ref: HTMLElement) {
     })
   );
 
+  const houses = new Array(3).fill(0).map(() =>
+    createHouse({
+      x: Math.random() * app.view.width,
+      y: Math.random() * app.view.height,
+    })
+  );
+
   // app.stage.addChild(createWorker());
   trees.forEach((x) => app.stage.addChild(x));
   workers.forEach((x) => app.stage.addChild(x));
   mushroomAreas.forEach((x) => app.stage.addChild(x));
   farms.forEach((x) => app.stage.addChild(x));
+  houses.forEach((x) => app.stage.addChild(x));
 
   // Add the bunny to the scene we are building
   // app.stage.addChild(bunny);
