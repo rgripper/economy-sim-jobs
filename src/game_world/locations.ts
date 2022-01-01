@@ -1,7 +1,7 @@
 import { CollisionBox, Location } from "../Bucket";
 
 export function get_random_free_location(
-  box: CollisionBox,
+  size: CollisionBox["size"],
   world_box: CollisionBox
 ): Location["location"] {
   return {
@@ -12,7 +12,7 @@ export function get_random_free_location(
 
 export function get_free_location_near(
   ideal_location: Location,
-  box: CollisionBox,
+  size: CollisionBox["size"],
   world_box: CollisionBox
 ): Location {
   return ideal_location;

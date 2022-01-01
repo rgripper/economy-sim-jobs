@@ -14,17 +14,18 @@ export const Worker = {
       id: generate_entity(),
       graphics: Object.assign(graphics, location),
       location,
-      size: { x: 4, y: 4 },
+      size: Worker.size,
     };
   },
+  size: { x: 4, y: 4 },
 };
 
 const create_graphics = () => {
   const size = 4;
   const gr = new PIXI.Graphics();
   //gr.beginFill();
-  //gr.lineStyle(2, 0xffefcf, 1, 0);
-  gr.beginFill(0xffefcf, 1);
+  gr.lineStyle(1, 0x3f3f7f, 1, 0);
+  gr.beginFill(0xafafff, 1);
   gr.drawCircle(size / 2, size / 2, size);
   gr.endFill();
   return gr;

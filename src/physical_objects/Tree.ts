@@ -14,16 +14,17 @@ export const Tree = {
       id: generate_entity(),
       graphics: Object.assign(graphics, location),
       location,
-      size: { x: 5, y: 5 },
+      size: Tree.size,
     };
   },
+  size: { x: 5, y: 5 },
 };
 
 const create_graphics = () => {
   const size = 14;
   const gr = new PIXI.Graphics();
-  gr.beginFill();
-  gr.lineStyle(1, 0x3fff7f, 1, 0);
+  gr.beginFill(0x3a7f4f, 1);
+  // gr.lineStyle(1, 0x3fff7f, 1, 0);
   gr.drawPolygon(
     [
       [0, size],
