@@ -32,6 +32,8 @@ function get_min_resource_needs(population: number): ResourceValue[] {
 
 export type Location = { location: { x: number; y: number } }
 export type CollisionBox = { size: { x: number; y: number } };
+export type PlaceholderGap = { placeholder_gap: { x: number; y: number } };
+
 export type PhysicalObject = Location & CollisionBox;
 
 export {};

@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import * as PIXI from "pixi.js";
 import "./App.css";
 import { initialize_game_world } from "./game_world/initializer";
+import { plan_constructions } from "./game_world/settlement_manager/manager";
 
 function App() {
   const initApp = useCallback((ref: HTMLElement | null) => {
@@ -16,18 +17,23 @@ function App() {
 export default App;
 
 function createApp(ref: HTMLElement) {
-  const app = new PIXI.Application({ width: 1200, height: 800, backgroundColor: 0x80e95b });
+  const app = new PIXI.Application({
+    width: 1200,
+    height: 800,
+    backgroundColor: 0x80e95b,
+  });
 
   // The application will create a canvas element for you that you
   // can then insert into the DOM
   ref.innerHTML = "";
   ref.appendChild(app.view);
 
-  const new_entities = initialize_game_world({
+  const world_box = {
     size: { x: app.view.width, y: app.view.height },
-  });
+  };
+  const new_entities = initialize_game_world(world_box);
 
-  app.stage.addChild(...new_entities.map(x => x.graphics));
+  app.stage.addChild(...new_entities.map((x) => x.graphics));
 
   // const trees = new Array(50).fill(0).map(() =>
   //   createTree({
@@ -76,6 +82,12 @@ function createApp(ref: HTMLElement) {
 
   // Listen for frame updates
   app.ticker.add(() => {
+    const construction_zones = plan_constructions(world_box);
+    console.log(construction_zones)
+    if (construction_zones.length) {
+      app.stage.addChild(...construction_zones.map((x) => x.graphics));
+    }
+
     // each frame we spin the bunny around a bit
   });
 }

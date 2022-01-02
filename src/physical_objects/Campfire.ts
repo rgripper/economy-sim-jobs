@@ -1,11 +1,7 @@
 import { Location, PhysicalObject } from "../Bucket";
 import * as PIXI from "pixi.js";
 import { Entity, generate_entity } from "../entities";
-
-export type Campfire = PhysicalObject & {
-  id: Entity;
-  graphics: PIXI.Graphics;
-};
+import { BaseObject } from "./BaseObject";
 
 const points = [
   [15.352820592559878, 45.17809361889958],
@@ -33,25 +29,23 @@ const points = [
 const size_x = Math.max(...points.map(([x, y]) => x));
 const size_y = Math.max(...points.map(([x, y]) => y));
 
-export const Campfire = {
-  new(location: Location["location"]): Campfire {
+export class Campfire extends BaseObject {
+  static new(location: Location["location"]): Campfire {
     const graphics = create_graphics();
-    return {
+    return Object.assign(new Campfire(), {
       id: generate_entity(),
       graphics: Object.assign(graphics, location),
       location,
       size: Campfire.size,
-    };
-  },
-  size: { x: size_x, y: size_y },
-};
+    });
+  }
+  static size = { x: size_x, y: size_y };
+}
 
 const create_graphics = () => {
   const gr = new PIXI.Graphics();
   gr.beginFill(0xff4f3f, 1);
-  // gr.lineStyle(1, 0x3fff7f, 1, 0);
 
-  // draws a star:
   gr.drawPolygon(
     points.map(([x, y]) => new PIXI.Point(x - size_x / 2, y - size_y / 2))
   );

@@ -3,39 +3,40 @@ import {
   PhysicalObject,
   ResourceValue,
   Location,
+  PlaceholderBox,
+  PlaceholderGap,
 } from "../Bucket";
 import * as PIXI from "pixi.js";
 import { Entity, generate_entity } from "../entities";
+import { BaseObject } from "./BaseObject";
 
 export type ConstructionKind = "Farm" | "House" | "Mine" | "Workshop";
 
-export type ConstructionBlueprint = {
+export type ConstructionBlueprint = CollisionBox & {
   graphics: PIXI.Graphics;
   kind: ConstructionKind;
   resources: ResourceValue[];
   work_units: number; // Defines how long a worker would build it for. Could be decreased by having multiple workers, or worker having a better Construction skill
 };
 
-export type Construction = PhysicalObject &
-  Pick<ConstructionBlueprint, "graphics" | "kind"> & {
-    id: Entity;
-  };
+export class Construction extends BaseObject implements PlaceholderGap {
+  placeholder_gap!: { x: number; y: number; };
+  kind!: ConstructionKind;
+  resources!: ResourceValue[];
+  work_units!: number;
 
-export const Construction = {
-  new(
-    location: Location,
-    size: CollisionBox["size"],
-    kind: ConstructionKind
-  ): Construction {
-    return {
+  static new(location: Location, kind: ConstructionKind): Construction {
+    const blueprint = blueprints.find((x) => x.kind === kind)!;
+    return Object.assign(new Construction(), {
       ...location,
-      size,
+      placeholder_gap: { x: 8, y: 8 },
+      size: blueprint.size,
+      graphics: blueprint.graphics,
       id: generate_entity(),
       kind,
-      graphics: blueprints.find((x) => x.kind === kind)!.graphics,
-    };
-  },
-};
+    });
+  }
+}
 
 const create_farm = () => {
   const area = 8 * 10;
@@ -93,12 +94,14 @@ export const blueprints: ConstructionBlueprint[] = [
     resources: [{ kind: "Wood", value: 1 }],
     work_units: 1,
     graphics: create_farm(),
+    size: { x: 18, y: 18 },
   },
   {
     kind: "House",
     resources: [{ kind: "Wood", value: 1 }],
     work_units: 1,
     graphics: create_house(),
+    size: { x: 10, y: 10 },
   },
   // {
   //   kind: "Mine",

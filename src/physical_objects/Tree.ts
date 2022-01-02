@@ -1,24 +1,20 @@
 import { Location, PhysicalObject } from "../Bucket";
 import * as PIXI from "pixi.js";
 import { Entity, generate_entity } from "../entities";
+import { BaseObject } from "./BaseObject";
 
-export type Tree = PhysicalObject & {
-  id: Entity;
-  graphics: PIXI.Graphics;
-};
-
-export const Tree = {
-  new(location: Location["location"]): Tree {
+export class Tree extends BaseObject {
+  static new(location: Location["location"]): Tree {
     const graphics = create_graphics();
-    return {
+    return Object.assign(new Tree(), {
       id: generate_entity(),
       graphics: Object.assign(graphics, location),
       location,
       size: Tree.size,
-    };
-  },
-  size: { x: 5, y: 5 },
-};
+    });
+  }
+  static size = { x: 5, y: 5 };
+}
 
 const create_graphics = () => {
   const size = 14;

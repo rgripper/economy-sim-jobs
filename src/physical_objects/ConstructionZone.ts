@@ -1,33 +1,25 @@
-import { Entity, generate_entity } from "../entities";
-import {
-  Location,
-  PhysicalObject,
-  CollisionBox,
-} from "../Bucket";
+import { generate_entity } from "../entities";
+import { Location, CollisionBox } from "../Bucket";
 import * as PIXI from "pixi.js";
-import { ConstructionKind } from "./Construction";
+import { blueprints, ConstructionKind } from "./Construction";
+import { BaseObject } from "./BaseObject";
 
-export type ConstructionZone = PhysicalObject & {
-  id: Entity;
-  kind: ConstructionKind;
-  graphics: PIXI.Graphics;
-};
-
-export const ConstructionZone = {
-  new(
-    location: Location,
-    size: CollisionBox["size"],
+export class ConstructionZone extends BaseObject {
+  kind!: ConstructionKind;
+  static new(
+    location: Location["location"],
     kind: ConstructionKind
   ): ConstructionZone {
-    return {
-      ...location,
+    const graphics = create_graphics();
+    return Object.assign(new ConstructionZone(), {
+      location,
       kind,
-      size,
+      size: blueprints.find((x) => x.kind === kind)!.size,
       id: generate_entity(),
-      graphics: create_graphics(),
-    };
-  },
-};
+      graphics: Object.assign(graphics, location),
+    });
+  }
+}
 
 const create_graphics = () => {
   const area = 40;

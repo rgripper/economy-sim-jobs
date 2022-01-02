@@ -16,7 +16,7 @@ export function get_free_location_near(
   world_box: CollisionBox
 ): Location["location"] {
   return {
-    x: Math.random() * 10 - 5 + ideal_location.location.x,
-    y: Math.random() * 10 - 5 + ideal_location.location.y,
+    x: Math.random() * 50 - 25 + ideal_location.location.x,
+    y: Math.random() * 50 - 25 + ideal_location.location.y,
   };
 }

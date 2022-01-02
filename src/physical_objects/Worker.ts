@@ -1,24 +1,21 @@
-import { Location, PhysicalObject } from "../Bucket";
+import { Location } from "../Bucket";
 import * as PIXI from "pixi.js";
-import { Entity, generate_entity } from "../entities";
+import { generate_entity } from "../entities";
+import { BaseObject } from "./BaseObject";
 
-export type Worker = PhysicalObject & {
-  id: Entity;
-  graphics: PIXI.Graphics;
-};
-
-export const Worker = {
-  new(location: Location["location"]): Worker {
+export class Worker extends BaseObject {
+  static new(location: Location["location"]): Worker {
     const graphics = create_graphics();
-    return {
+    return Object.assign(new Worker(), {
       id: generate_entity(),
       graphics: Object.assign(graphics, location),
       location,
       size: Worker.size,
-    };
-  },
-  size: { x: 4, y: 4 },
-};
+    });
+  }
+
+  static size = { x: 4, y: 4 };
+}
 
 const create_graphics = () => {
   const size = 4;
