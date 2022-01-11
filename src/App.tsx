@@ -2,7 +2,10 @@ import { useCallback } from "react";
 import * as PIXI from "pixi.js";
 import "./App.css";
 import { initialize_game_world } from "./game_world/initializer";
-import { plan_constructions } from "./game_world/settlement_manager/manager";
+import { plan_constructions } from "./game_world/settlement_manager/planner";
+import { entities } from "./game_world/entities";
+import { Worker } from "./physical_objects/Worker";
+import { Location, MovingTo } from "./Bucket";
 
 function App() {
   const initApp = useCallback((ref: HTMLElement | null) => {
@@ -35,59 +38,36 @@ function createApp(ref: HTMLElement) {
 
   app.stage.addChild(...new_entities.map((x) => x.graphics));
 
-  // const trees = new Array(50).fill(0).map(() =>
-  //   createTree({
-  //     x: Math.random() * app.view.width,
-  //     y: Math.random() * app.view.height,
-  //   })
-  // );
-
-  // const mushroomAreas = new Array(5).fill(0).map(() =>
-  //   createMushroomArea({
-  //     x: Math.random() * app.view.width,
-  //     y: Math.random() * app.view.height,
-  //   })
-  // );
-
-  // const workers = new Array(5).fill(0).map(() =>
-  //   createWorker({
-  //     x: Math.random() * app.view.width,
-  //     y: Math.random() * app.view.height,
-  //   })
-  // );
-
-  // const farms = new Array(3).fill(0).map(() =>
-  //   createFarm({
-  //     x: Math.random() * app.view.width,
-  //     y: Math.random() * app.view.height,
-  //   })
-  // );
-
-  // const houses = new Array(3).fill(0).map(() =>
-  //   createHouse({
-  //     x: Math.random() * app.view.width,
-  //     y: Math.random() * app.view.height,
-  //   })
-  // );
-
-  // // app.stage.addChild(createWorker());
-  // trees.forEach((x) => app.stage.addChild(x));
-  // workers.forEach((x) => app.stage.addChild(x));
-  // mushroomAreas.forEach((x) => app.stage.addChild(x));
-  // farms.forEach((x) => app.stage.addChild(x));
-  // houses.forEach((x) => app.stage.addChild(x));
-
-  // Add the bunny to the scene we are building
-  // app.stage.addChild(bunny);
-
-  // Listen for frame updates
   app.ticker.add(() => {
-    const construction_zones = plan_constructions(world_box);
-    console.log(construction_zones)
-    if (construction_zones.length) {
-      app.stage.addChild(...construction_zones.map((x) => x.graphics));
+    const construction_sites = plan_constructions(world_box);
+    if (construction_sites.length) {
+      app.stage.addChild(...construction_sites.map((x) => x.graphics));
     }
 
+    const moving_workers = entities.filter(
+      (x) => x instanceof Worker && x.moving_to
+    ) as Worker[];
+    moving_workers.forEach((worker) => {
+      if (!worker.moving_to) {
+        return;
+      }
+
+      if (
+        worker.moving_to.x - worker.location.x < 4 &&
+        worker.moving_to.y - worker.location.y < 4
+      ) {
+        worker.moving_to = undefined;
+      } else {
+        worker.moving_to.x +=
+          worker.moving_to.x < worker.location.x
+            ? -worker.velocity
+            : worker.velocity;
+        worker.moving_to.y +=
+          worker.moving_to.y < worker.location.y
+            ? -worker.velocity
+            : worker.velocity;
+      }
+    });
     // each frame we spin the bunny around a bit
   });
 }

@@ -5,12 +5,6 @@ import { Entity } from "./entities";
 
 // Assumptions: villagers never die from hunger, but become severely slowed/somehow debilitated
 
-export type ChoreKind = "Farming" | "TreeCutting" | "CollectingFood" | "Crafting" | "MiningIron"
-
-export type ChorePriority = {
-  priority: number;
-  kind: ChoreKind;
-};
 
 export type WorkerChore = {
   worker_id: Entity;
@@ -30,22 +24,14 @@ function get_min_resource_needs(population: number): ResourceValue[] {
   ];
 }
 
-export type Location = { location: { x: number; y: number } }
+export type Location = { location: { x: number; y: number } };
 export type CollisionBox = { size: { x: number; y: number } };
 export type PlaceholderGap = { placeholder_gap: { x: number; y: number } };
-
 export type PhysicalObject = Location & CollisionBox;
-
-export {};
-
+export type MovingTo = { moving_to: { x: number; y: number } };
 // Chores
 // Min requirements
 // Actual requirements (orders to construct buildings, craft more weapons/armor)
-// 
-
-
-
-
-
+//
 
 // if house_count < population then build a house

@@ -1,9 +1,15 @@
-import { Location } from "../Bucket";
+import { Location, MovingTo } from "../Bucket";
 import * as PIXI from "pixi.js";
 import { generate_entity } from "../entities";
 import { BaseObject } from "./BaseObject";
 
-export class Worker extends BaseObject {
+export class Worker extends BaseObject implements Partial<MovingTo> {
+  velocity: number = 2;
+  moving_to?: {
+    x: number;
+    y: number;
+  };
+
   static new(location: Location["location"]): Worker {
     const graphics = create_graphics();
     return Object.assign(new Worker(), {

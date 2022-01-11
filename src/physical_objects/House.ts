@@ -1,9 +1,7 @@
 import {
   CollisionBox,
-  PhysicalObject,
   ResourceValue,
   Location,
-  PlaceholderBox,
   PlaceholderGap,
 } from "../Bucket";
 import * as PIXI from "pixi.js";
@@ -19,21 +17,22 @@ export type ConstructionBlueprint = CollisionBox & {
   work_units: number; // Defines how long a worker would build it for. Could be decreased by having multiple workers, or worker having a better Construction skill
 };
 
-export class Construction extends BaseObject implements PlaceholderGap {
-  placeholder_gap!: { x: number; y: number; };
-  kind!: ConstructionKind;
-  resources!: ResourceValue[];
-  work_units!: number;
+type LivingSpace = { worker_id?: Entity };
 
-  static new(location: Location, kind: ConstructionKind): Construction {
+export class House extends BaseObject implements PlaceholderGap {
+  placeholder_gap!: { x: number; y: number; };
+  living_spaces!: LivingSpace[];
+  static new(location: Location): House {
+    const kind = 'House'
     const blueprint = blueprints.find((x) => x.kind === kind)!;
-    return Object.assign(new Construction(), {
+    return Object.assign(new House(), {
       ...location,
       placeholder_gap: { x: 8, y: 8 },
       size: blueprint.size,
       graphics: blueprint.graphics,
       id: generate_entity(),
       kind,
+      living_spaces: [{}, {}],
     });
   }
 }

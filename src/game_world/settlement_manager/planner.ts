@@ -1,8 +1,8 @@
 import { CollisionBox } from "../../Bucket";
 import { Worker } from "../../physical_objects/Worker";
 import { Campfire } from "../../physical_objects/Campfire";
-import { Construction } from "../../physical_objects/Construction";
-import { ConstructionZone } from "../../physical_objects/ConstructionZone";
+import { House } from "../../physical_objects/House";
+import { ConstructionSite } from "../../physical_objects/ConstructionSite";
 import { entities } from "../entities";
 import { get_free_location_near } from "../locations";
 
@@ -11,8 +11,8 @@ export function plan_constructions(world_box: CollisionBox) {
 
   const house_count = entities.filter(
     (x) =>
-      (x instanceof Construction || x instanceof ConstructionZone) &&
-      x.kind === "House"
+      x instanceof House ||
+      (x instanceof ConstructionSite && x.kind === "House")
   ).length;
 
   const campfire = entities.find((x) => x instanceof Campfire)! as Campfire;
@@ -22,16 +22,16 @@ export function plan_constructions(world_box: CollisionBox) {
     return [];
   }
 
-  const construction_zones = new Array(new_house_count)
+  const construction_sites = new Array(new_house_count)
     .fill(0)
     .map(() =>
-      ConstructionZone.new(
+      ConstructionSite.new(
         get_free_location_near(campfire, campfire.size, world_box),
         "House"
       )
     );
 
-  entities.push(...construction_zones);
+  entities.push(...construction_sites);
 
-  return construction_zones;
+  return construction_sites;
 }

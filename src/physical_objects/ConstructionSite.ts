@@ -1,17 +1,17 @@
 import { generate_entity } from "../entities";
 import { Location, CollisionBox } from "../Bucket";
 import * as PIXI from "pixi.js";
-import { blueprints, ConstructionKind } from "./Construction";
+import { blueprints, ConstructionKind } from "./House";
 import { BaseObject } from "./BaseObject";
 
-export class ConstructionZone extends BaseObject {
+export class ConstructionSite extends BaseObject {
   kind!: ConstructionKind;
   static new(
     location: Location["location"],
     kind: ConstructionKind
-  ): ConstructionZone {
+  ): ConstructionSite {
     const graphics = create_graphics();
-    return Object.assign(new ConstructionZone(), {
+    return Object.assign(new ConstructionSite(), {
       location,
       kind,
       size: blueprints.find((x) => x.kind === kind)!.size,
