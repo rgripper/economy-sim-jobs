@@ -2,9 +2,9 @@
 // In more complex case we could have alternative resources for buildings and weapons (Wood vs ClayBlock, Iron vs Bronze, etc.)
 
 import { Entity } from "./entities";
+import { ChoreKind } from "./game_world/settlement_manager/prioritizer";
 
 // Assumptions: villagers never die from hunger, but become severely slowed/somehow debilitated
-
 
 export type WorkerChore = {
   worker_id: Entity;
@@ -24,11 +24,12 @@ function get_min_resource_needs(population: number): ResourceValue[] {
   ];
 }
 
-export type Location = { location: { x: number; y: number } };
-export type CollisionBox = { size: { x: number; y: number } };
-export type PlaceholderGap = { placeholder_gap: { x: number; y: number } };
+export type Point = { x: number; y: number };
+export type Location = { location: Point };
+export type CollisionBox = { size: Point };
+export type PlaceholderGap = { placeholder_gap: Point };
 export type PhysicalObject = Location & CollisionBox;
-export type MovingTo = { moving_to: { x: number; y: number } };
+export type MovingTo = { moving_to: Point };
 // Chores
 // Min requirements
 // Actual requirements (orders to construct buildings, craft more weapons/armor)

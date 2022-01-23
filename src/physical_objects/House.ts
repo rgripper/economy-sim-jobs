@@ -93,14 +93,14 @@ export const blueprints: ConstructionBlueprint[] = [
     resources: [{ kind: "Wood", value: 1 }],
     work_units: 1,
     graphics: create_farm(),
-    size: { x: 18, y: 18 },
+    size: { x: 32, y: 32 },
   },
   {
     kind: "House",
     resources: [{ kind: "Wood", value: 1 }],
     work_units: 1,
     graphics: create_house(),
-    size: { x: 10, y: 10 },
+    size: { x: 20, y: 20 },
   },
   // {
   //   kind: "Mine",
